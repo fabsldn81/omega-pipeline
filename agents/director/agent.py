@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agents.base import Agent, AgentContext, load_artifact, load_prompt, write_artifact
+from agents.base import Agent, AgentContext, ingest_existing, load_artifact, load_prompt, write_artifact
 from core.jsonio import require_keys
 from core.models import ART_SCRIPT, ART_SHOTLIST
 
@@ -21,6 +21,11 @@ class DirectorAgent(Agent):
 
     def run(self, ctx: AgentContext) -> dict[str, Any]:
         ep = ctx.episode
+        if ctx.config.ingest_existing:
+            ing = ingest_existing(ctx, [(ART_SHOTLIST, "shotlist/shotlist.json", ["shots"])])
+            if ing is not None:
+                ep.log(f"{self.badge}: ingested existing shot list (skill output).")
+                return {"agent": self.badge, **ing}
         script = load_artifact(ctx, ART_SCRIPT)
         system = ctx.channel_dna + "\n\n" + load_prompt(self.key, ctx.paths)
         user = (

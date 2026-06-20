@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agents.base import Agent, AgentContext, load_artifact, load_prompt, write_artifact, write_text
+from agents.base import Agent, AgentContext, ingest_existing, load_artifact, load_prompt, write_artifact, write_text
 from core.jsonio import require_keys
 from core.models import ART_OUTLINE, ART_SCRIPT
 
@@ -20,6 +20,11 @@ class ScriptwriterAgent(Agent):
 
     def run(self, ctx: AgentContext) -> dict[str, Any]:
         ep = ctx.episode
+        if ctx.config.ingest_existing:
+            ing = ingest_existing(ctx, [(ART_SCRIPT, "script/script.json", SCRIPT_KEYS)])
+            if ing is not None:
+                ep.log(f"{self.badge}: ingested existing script (skill output).")
+                return {"agent": self.badge, **ing}
         outline = load_artifact(ctx, ART_OUTLINE)
         system = ctx.channel_dna + "\n\n" + load_prompt(self.key, ctx.paths)
         user = (

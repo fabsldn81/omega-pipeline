@@ -84,6 +84,26 @@ def add_asset(ctx: AgentContext, asset: MediaAsset) -> MediaAsset:
     return asset
 
 
+def ingest_existing(ctx: AgentContext, items: list[tuple[str, str, list[str]]]) -> dict | None:
+    """Reuse artifacts already on disk instead of generating them.
+
+    `items` is a list of (artifact_key, rel_subpath, required_keys). If EVERY listed
+    file already exists (e.g. written by a Claude Code skill), load + validate each,
+    record it on the episode, and return a summary dict. Otherwise return None so the
+    agent generates as normal. Enabled by Config.ingest_existing (HT_INGEST=1).
+    """
+    from core.jsonio import load_json, require_keys
+
+    paths = [(key, ctx.episode_dir / rel, req) for key, rel, req in items]
+    if not all(p.exists() for _, p, _ in paths):
+        return None
+    for key, path, req in paths:
+        data = load_json(path)
+        require_keys(data, req, context=f"ingest[{key}]")
+        ctx.episode.artifacts[key] = path.relative_to(ctx.paths.root).as_posix()
+    return {"ingested": [key for key, _, _ in items]}
+
+
 class Agent(ABC):
     key: str = ""
 

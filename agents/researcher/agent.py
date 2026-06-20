@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agents.base import Agent, AgentContext, load_prompt, write_artifact
+from agents.base import Agent, AgentContext, ingest_existing, load_prompt, write_artifact
 from core.jsonio import require_keys
 from core.models import ART_DOSSIER, ART_PACKAGING
 
@@ -20,6 +20,14 @@ class ResearcherAgent(Agent):
 
     def run(self, ctx: AgentContext) -> dict[str, Any]:
         ep = ctx.episode
+        if ctx.config.ingest_existing:
+            ing = ingest_existing(ctx, [
+                (ART_DOSSIER, "research/dossier.json", DOSSIER_KEYS),
+                (ART_PACKAGING, "research/packaging.json", PACKAGING_KEYS),
+            ])
+            if ing is not None:
+                ep.log(f"{self.badge}: ingested existing dossier + packaging (skill output).")
+                return {"agent": self.badge, **ing}
         system = ctx.channel_dna + "\n\n" + load_prompt(self.key, ctx.paths)
         user = (
             f"Episode topic: {ep.topic or ep.title}\n"

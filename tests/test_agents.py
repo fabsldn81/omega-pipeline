@@ -97,3 +97,36 @@ class RegistryTests(HistoryTubeTestCase):
             self.assertIn(key, CREW)
             self.assertEqual(get_agent(key).key, key)
             self.assertTrue(get_agent(key).name)
+
+
+class IngestModeTests(HistoryTubeTestCase):
+    """HT_INGEST: a writing agent reuses a skill-produced artifact instead of generating."""
+
+    def test_skill_artifact_is_reused_not_regenerated(self):
+        from core.config import load_config
+        from core.jsonio import load_json as _load, save_json
+
+        cfg = load_config(self.repo, overrides={
+            "llm": "mock", "store": "local", "higgsfield": "mock", "ingest": "1"})
+        ep = self.make_episode("ing")
+        edir = self.repo / "episodes" / "ing"
+        # Pretend a Claude Code skill already wrote these (no API used):
+        save_json(edir / "research" / "dossier.json", {
+            "facts": ["a skill-written fact"], "timeline": [], "key_figures": [],
+            "hooks": [], "controversies": [], "sources": [], "demand_signal": "x"})
+        save_json(edir / "research" / "packaging.json", {
+            "title_variants": ["Skill Title"], "thumbnail_concepts": [], "hook": "h",
+            "description": "d", "tags": [], "chapters": [], "end_screen": "e"})
+
+        ctx = AgentContext(episode=ep, config=cfg, adapters=self.sr.adapters)
+        summary = get_agent("researcher").run(ctx)
+
+        self.assertIn("ingested", summary)
+        dossier = _load(self.repo / ep.artifacts["dossier"])
+        self.assertEqual(dossier["facts"], ["a skill-written fact"])  # skill's, not the mock's
+
+    def test_ingest_off_by_default_regenerates(self):
+        ep = self.make_episode("regen")
+        ctx = AgentContext(episode=ep, config=self.config, adapters=self.sr.adapters)
+        summary = get_agent("researcher").run(ctx)
+        self.assertNotIn("ingested", summary)  # default config has ingest off

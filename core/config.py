@@ -10,6 +10,9 @@ Environment variables (all optional):
   HT_HIGGSFIELD=mock|api           (default: mock)
   HT_LLM_MODEL=<model id>          (default: claude-opus-4-8 — only used by AnthropicLLM)
   HT_DRY_RUN=1                      (force editing scripts to plan-only, never exec)
+  HT_INGEST=1                      (writing agents reuse an artifact already on disk
+                                    instead of generating it — lets the Claude Code
+                                    skills produce the content with no API key)
 """
 
 from __future__ import annotations
@@ -38,6 +41,7 @@ class Config:
     higgsfield_backend: str = "mock"
     llm_model: str = "claude-opus-4-8"
     dry_run: bool = False
+    ingest_existing: bool = False
 
     @property
     def is_fully_mocked(self) -> bool:
@@ -73,6 +77,7 @@ def load_config(root: Path | None = None, *, overrides: dict[str, str] | None = 
         voice = load_json(voice_path)
 
     dry = pick("HT_DRY_RUN", "dry_run", "0") in {"1", "true", "yes", "on"}
+    ingest = pick("HT_INGEST", "ingest", "0") in {"1", "true", "yes", "on"}
 
     return Config(
         paths=paths,
@@ -84,4 +89,5 @@ def load_config(root: Path | None = None, *, overrides: dict[str, str] | None = 
         higgsfield_backend=pick("HT_HIGGSFIELD", "higgsfield", "mock"),
         llm_model=os.environ.get("HT_LLM_MODEL", overrides.get("llm_model", "claude-opus-4-8")),
         dry_run=dry,
+        ingest_existing=ingest,
     )
