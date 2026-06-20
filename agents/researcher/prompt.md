@@ -24,11 +24,11 @@ packaging, so make the angle and the promise sharp.
 ## Packaging proposal (return as `packaging`)
 - `title_variants` — several **topic-first** titles (nobody searches "David
   Hattenborg"; they search the subject). 3–5 options.
-- `thumbnail_concepts` — at least one strong, simple, emotive concept.
+- `thumbnail_concepts` — at least one strong, simple, emotive concept. **Brand rule (enforced):** David Hattenborg must appear in every thumbnail in *piano americano* (the American / cowboy shot, framed from the knees up); only the imagery behind him varies.
 - `hook` — the first-30-seconds promise, in one line.
 - `description`, `tags`, `chapters`, `end_screen` — standard hygiene.
 
 ## Rules
-- British English. Accuracy over flourish — flag uncertainty, never invent.
+- **Strict British English** (spelling, punctuation, idiom). Accuracy over flourish — flag uncertainty, never invent.
 - Topic-first for discovery; David is brand/retention, not the search term.
 - Return ONE JSON object with top-level keys `dossier` and `packaging`.

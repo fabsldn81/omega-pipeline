@@ -15,3 +15,10 @@
   - Open: David activates the Chronos Compass → *"Sit down. Here comes the story."*
   - Close: *"The past is fixed. The future is not."* → Compass activates → *"I'll see you in the next story."*
 - **Business posture:** this is a business with an aggressive growth target. Packaging and retention are first-class citizens, not afterthoughts.
+
+## Enforced brand rules (Fabio)
+
+These are **hard rules**, not suggestions. Every writing, packaging and prompt agent obeys them.
+
+- **Thumbnail — David is always present.** *Every* thumbnail features **David Hattenborg** as a figure in **piano americano** (the American / "cowboy" shot — framed from roughly the knees up). Only the imagery *behind* him changes from episode to episode. David is the constant; the background is the variable.
+- **Language — strict British English.** All text — titles, descriptions, chapters, captions and scripts — is in **strict British English**: British spelling (e.g. *-ise*, *colour*, *defence*, *whilst* where natural), punctuation and idiom. No American spellings, ever.
