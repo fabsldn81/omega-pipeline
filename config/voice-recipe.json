@@ -1,16 +1,24 @@
 {
-  "_comment": "David Hattenborg's locked voice. AI-created, NOT cloned. Recipe-based for portability (build plan Section 6): the recipe — not an account-bound asset — is what transfers to Fabio's Higgsfield account. Audition in Higgsfield Speak 2.0 (prompt-driven: tone/emotion/delivery come from how the prompt is written), then lock preset + exact delivery-prompt text + settings here.",
-  "_status": "TO LOCK at build time (Section 11). All null fields must be filled before Phase 7 (Render).",
+  "_comment": "David Hattenborg's LOCKED voice. Recipe-based for portability (build plan Section 6). Approved by Fabio on 2026-06-20 after auditioning in JJ's Higgsfield. Arthur is a shared PRESET voice (ElevenLabs engine via Higgsfield generate_audio) — not an account-bound custom clone — so it reproduces on Fabio's Higgsfield account from the voice_id below.",
+  "_status": "LOCKED (2026-06-20).",
   "character": "David Hattenborg",
-  "provider": "Higgsfield Speak 2.0",
-  "portable_fallback": "ElevenLabs",
+  "provider": "Higgsfield generate_audio",
+  "model": "text2speech_v2_elevenlabs",
+  "engine": "elevenlabs",
+  "voice_name": "Arthur",
+  "voice_id": "30fc8796-ceb6-4a66-b3a7-4a145ef7f346",
+  "voice_type": "preset",
+  "gender": "male",
+  "portable_fallback": "ElevenLabs (Arthur is an ElevenLabs voice; match it directly if ever moving off Higgsfield)",
   "register": "British English, theatrical, dramatic, wise, warm, curious, optimistic — a storyteller, never a lecturer",
-  "preset": null,
-  "delivery_prompt": null,
-  "settings": {},
+  "preset": "Arthur",
+  "delivery_prompt": "Write the narration itself for delivery: strict British English; theatrical pacing via full stops and em-dashes; short, weighted sentences at the climax. ElevenLabs preset voices take their tone from the written text, not a separate style prompt.",
+  "settings": {
+    "_note": "Generated with engine defaults, which Fabio approved. ElevenLabs engine_settings (stability, similarity_boost, style) can be tuned later if needed."
+  },
   "portability_check": {
     "question": "Are Higgsfield custom voices account-bound?",
-    "finding": null,
-    "note": "Verify empirically (Section 11). Rely on the recipe regardless. ElevenLabs is the portable fallback if a fully ownable bespoke voice is ever wanted."
+    "finding": "Not applicable — Arthur is a built-in PRESET (shared catalogue), not a custom clone, so it is reproducible on any Higgsfield account via voice_id. Custom-clone portability remains untested and is avoided by using a preset.",
+    "note": "ElevenLabs is the deeper fallback: Arthur is an ElevenLabs voice, so it can be matched directly there if the pipeline ever moves off Higgsfield."
   }
 }
