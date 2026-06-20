@@ -14,6 +14,18 @@ from adapters.suno import ensure_placeholder, ingest_music
 from agents.base import Agent, AgentContext, add_asset, load_artifact, write_artifact
 from core.models import ART_PROMPTS, ART_SCRIPT, ART_SHOTLIST, MediaAsset
 
+_VIDEO_EXTS = (".mp4", ".mov", ".webm", ".mkv")
+
+
+def _existing_clips(renders_dir, shot_id: str) -> list:
+    """Real clip files already in renders/ for a shot (e.g. dropped in via the Higgsfield MCP)."""
+    if not renders_dir.exists():
+        return []
+    return sorted(
+        p for p in renders_dir.iterdir()
+        if p.is_file() and p.suffix.lower() in _VIDEO_EXTS and p.stem.startswith(shot_id)
+    )
+
 
 class RenderAgent(Agent):
     key = "render"
@@ -30,12 +42,27 @@ class RenderAgent(Agent):
         voice_ext = ".voice.txt" if is_mock else ".wav"
         takes = max(1, int(os.environ.get("HT_TAKES", "1")))
 
+        renders_dir = ctx.episode_dir / "renders"
         clip_count = 0
         for shot in shots:
+            # Render-ingest: reuse a real clip already in renders/ (e.g. generated via the
+            # Higgsfield MCP and dropped in), instead of (re)generating a placeholder.
+            existing = _existing_clips(renders_dir, shot["id"]) if ctx.config.ingest_existing else []
+            if existing:
+                for take, clip in enumerate(existing, 1):
+                    add_asset(ctx, MediaAsset(
+                        id=f"{shot['id']}-t{take}", type="clip",
+                        status="Selected" if take == 1 else "Raw",
+                        local_path=clip.relative_to(ctx.paths.root).as_posix(),
+                        shot_id=shot["id"], take=take))
+                    clip_count += 1
+                shot["render_status"] = "ingested"
+                shot["chosen_take"] = 1
+                continue
             ps = prompt_sets.get(shot["id"], {})
             prompt_text = f"{ps.get('image_prompt', shot['visual_subject'])}\n{ps.get('motion_prompt', '')}"
             for take in range(1, takes + 1):
-                out = ctx.episode_dir / "renders" / f"{shot['id']}_take{take}{clip_ext}"
+                out = renders_dir / f"{shot['id']}_take{take}{clip_ext}"
                 path = ctx.higgsfield.generate_clip(prompt_text, out, shot_id=shot["id"], take=take)
                 add_asset(ctx, MediaAsset(
                     id=f"{shot['id']}-t{take}",

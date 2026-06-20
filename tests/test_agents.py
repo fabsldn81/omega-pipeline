@@ -130,3 +130,21 @@ class IngestModeTests(HistoryTubeTestCase):
         ctx = AgentContext(episode=ep, config=self.config, adapters=self.sr.adapters)
         summary = get_agent("researcher").run(ctx)
         self.assertNotIn("ingested", summary)  # default config has ingest off
+
+    def test_render_reuses_real_clip_dropped_in(self):
+        from core.config import load_config
+
+        cfg = load_config(self.repo, overrides={
+            "llm": "mock", "store": "local", "higgsfield": "mock", "ingest": "1"})
+        ep = self.make_episode("rclip")
+        gen = AgentContext(episode=ep, config=self.config, adapters=self.sr.adapters)
+        for key in ("researcher", "concept", "critic", "scriptwriter", "director", "prompt_engineer"):
+            get_agent(key).run(gen)
+        # Pretend a real clip (e.g. Higgsfield MCP) was dropped in for S01:
+        renders = self.repo / "episodes" / "rclip" / "renders"
+        renders.mkdir(parents=True, exist_ok=True)
+        (renders / "S01_take1.mp4").write_bytes(b"\x00\x00\x00")
+
+        get_agent("render").run(AgentContext(episode=ep, config=cfg, adapters=self.sr.adapters))
+        s01 = [a for a in ep.assets if a.shot_id == "S01" and a.type == "clip"]
+        self.assertTrue(any(a.local_path.endswith("S01_take1.mp4") for a in s01))
