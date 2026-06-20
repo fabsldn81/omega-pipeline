@@ -1,0 +1,49 @@
+# --- Secrets / environment ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+
+# --- OS cruft (mac + windows) ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Local state / cache (folder structure kept via README) ---
+state/cache/
+state/*.local.json
+
+# --- Local episode working folders + local state DB (regenerate: python cli.py demo) ---
+episodes/*/
+!episodes/README.md
+state/episodes.json
+
+# --- Generated media: keep folder structure (READMEs), ignore heavy assets ---
+episodes/**/renders/
+episodes/**/audio/
+episodes/**/final/
+episodes/**/thumbnails/
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.mp3
+*.aac
+*.srt
+
+# Generated stills/thumbnails are heavy & regenerable — but keep locked visual refs.
+*.png
+*.jpg
+*.jpeg
+!config/visual-refs/**

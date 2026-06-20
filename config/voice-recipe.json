@@ -1,0 +1,16 @@
+{
+  "_comment": "David Hattenborg's locked voice. AI-created, NOT cloned. Recipe-based for portability (build plan Section 6): the recipe — not an account-bound asset — is what transfers to Fabio's Higgsfield account. Audition in Higgsfield Speak 2.0 (prompt-driven: tone/emotion/delivery come from how the prompt is written), then lock preset + exact delivery-prompt text + settings here.",
+  "_status": "TO LOCK at build time (Section 11). All null fields must be filled before Phase 7 (Render).",
+  "character": "David Hattenborg",
+  "provider": "Higgsfield Speak 2.0",
+  "portable_fallback": "ElevenLabs",
+  "register": "British English, theatrical, dramatic, wise, warm, curious, optimistic — a storyteller, never a lecturer",
+  "preset": null,
+  "delivery_prompt": null,
+  "settings": {},
+  "portability_check": {
+    "question": "Are Higgsfield custom voices account-bound?",
+    "finding": null,
+    "note": "Verify empirically (Section 11). Rely on the recipe regardless. ElevenLabs is the portable fallback if a fully ownable bespoke voice is ever wanted."
+  }
+}

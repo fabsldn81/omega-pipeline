@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "history-tube"
+version = "0.1.0"
+description = "Agentic content-production pipeline for the History Tube YouTube channel."
+requires-python = ">=3.11"
+readme = "README.md"
+# Runtime needs NOTHING beyond the standard library for the default (mock) path.
+# Real adapters pull optional extras (see [project.optional-dependencies]).
+dependencies = []
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=0.40"]
+notion = ["notion-client>=2.2"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+history-tube = "core.cli:main"
+
+[tool.setuptools]
+# Top-level packages mirror the build plan's repo tree (Section 8).
+packages = [
+  "core",
+  "adapters",
+  "orchestrator",
+  "scripts",
+  "agents",
+  "agents.researcher",
+  "agents.concept",
+  "agents.critic",
+  "agents.scriptwriter",
+  "agents.director",
+  "agents.prompt_engineer",
+  "agents.render",
+  "agents.editor",
+  "agents.shorts",
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

@@ -1,0 +1,8 @@
+# Optional developer tooling. The mock/dry-run pipeline and the test suite run on
+# the standard library alone (`python -m unittest discover -s tests -t .`).
+# pytest is supported but not required.
+pytest>=8
+
+# Real-adapter extras (only needed when wiring live services on Fabio's machine):
+#   pip install anthropic        # adapters/llm.py -> AnthropicLLM
+#   pip install notion-client    # adapters/store.py -> NotionStore

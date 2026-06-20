@@ -1,0 +1,36 @@
+{
+  "_comment": "Which generation model per shot type. Higgsfield is the visual stack (pure AI). All 'chosen' fields are null until validated empirically at build time (build plan Section 6 + Section 11). Record findings in the 'notes' fields.",
+  "_status": "TO VALIDATE at build time (Build D/E). Do not assume — test per shot type.",
+  "visual_stack": "Higgsfield",
+  "stills": {
+    "candidates": ["Nano Banana Pro", "Seedream"],
+    "chosen": null,
+    "notes": "Generate the still frame, then animate it (see 'motion'). Or use direct text-to-video where a still is not needed."
+  },
+  "motion": {
+    "candidates": ["Seedance", "Kling"],
+    "chosen": null,
+    "notes": "Animate a still into a clip (image-to-video)."
+  },
+  "text_to_video": {
+    "candidates": [],
+    "chosen": null,
+    "notes": "Direct text/image-to-video where appropriate."
+  },
+  "shot_type_overrides": {
+    "_comment": "Per-shot-type model picks once tested (Section 11). null = use the default for that motion/stills role.",
+    "portrait_or_figure": null,
+    "architecture": null,
+    "map_or_cartography": null,
+    "battle_or_crowd": null,
+    "landscape_or_establishing": null,
+    "artifact_closeup": null,
+    "david_bookend": null
+  },
+  "voice_tts": {
+    "provider": "Higgsfield Speak 2.0",
+    "portable_fallback": "ElevenLabs",
+    "recipe": "config/voice-recipe.json",
+    "notes": "Voice is AI-created, not cloned. Recipe-based for portability (Section 6)."
+  }
+}
