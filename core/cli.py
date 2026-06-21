@@ -21,6 +21,22 @@ from core.config import load_config
 from orchestrator.showrunner import WAITING_GATE, Showrunner
 
 
+def _force_utf8_output() -> None:
+    """Make stdout/stderr UTF-8 so the crew's glyphs (✓, •, ⏸) never crash a run.
+
+    No-op where streams are already UTF-8 (macOS/Linux) or non-reconfigurable
+    (e.g. a StringIO under test). Windows' default console codepage (cp1252)
+    cannot encode these characters, which would otherwise abort every command.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8")
+            except (ValueError, OSError):
+                pass
+
+
 def _showrunner() -> Showrunner:
     return Showrunner(load_config())
 
@@ -184,6 +200,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _force_utf8_output()
     args = build_parser().parse_args(argv)
     try:
         return args.func(args)
