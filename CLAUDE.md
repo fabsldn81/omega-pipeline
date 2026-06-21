@@ -81,3 +81,40 @@ loud (`AdapterNotConfigured`) until credentials/MCPs are wired — see
 - Keep voice and music as **separate stems**; the editor ducks music under narration.
 - Don't bake new deps into the default path — the mock pipeline is stdlib-only.
 - Touch only what the task needs; the build itself is gated (see build plan Section 9).
+
+## Channel creative brief (always in scope)
+
+Full detail in [`config/channel-dna.md`](config/channel-dna.md). Key rules reproduced here so they are always in context:
+
+**The soul.** Historical narration that builds a dramatic arc to an emotional, theatrical climax. Viewers must *feel* history, not just learn it. Retention and packaging are first-class citizens.
+
+**David Hattenborg.** Archaeologist-historian-explorer from 2060. Wise, curious, warm, optimistic — a storyteller, never a lecturer. Appears **only in the open/close bookends**; the body is historical AI b-roll. This is a deliberate architectural choice.
+
+**Brand constants (every episode, verbatim).**
+- Open: David activates Chronos Compass → *"Sit down. Here comes the story."*
+- Close: *"The past is fixed. The future is not."* → Compass activates → *"I'll see you in the next story."*
+
+**Locked voice.** Higgsfield / ElevenLabs Arthur preset — see `config/voice-recipe.json`. LOCKED 2026-06-20.
+
+**Visual identity.**
+- Thumbnail: David always present in **piano americano** (knees-up shot). Background varies; David is constant.
+- Visual refs: `config/visual-refs/` (pending lock of david-reference and chronos-compass-reference).
+
+**Hard rules — no exceptions.**
+- **Strict British English** everywhere: `-ise`, `colour`, `behaviour`, `whilst`, `programme`, etc. No American spellings ever.
+- **Thumbnail always features David** in piano americano.
+- **Voice + music always separate stems** — never baked together before final mix.
+- David never predicts the future as certainty; he explores possibilities.
+
+**Video specs.**
+- Format: 16:9 long-form, 12–15 min, 1080p, 24 fps.
+- Shorts: 9:16 vertical, 60–90 s, from long-form assets.
+- Captions: Whisper SRT.
+
+**Writing style (narration).**
+- Strong cold-open hook — start in motion, never "Today we're looking at…"
+- Dramatic arc mandatory; emotional climax mandatory.
+- Scene painting over fact listing. Weighted sentences. Short sentences at key beats.
+- No padding, no passive voice, no hedge clusters, no clichés.
+
+**Notion store.** Episodes DB: `d21dede219684be2832f161d14b483dd`. Set `NOTION_TOKEN` + `HT_STORE=notion`.
